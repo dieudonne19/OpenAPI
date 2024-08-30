@@ -1,0 +1,120 @@
+openapi: 3.0.3
+info:
+  title: STD23105-TD3
+  version: 1.0.0
+servers:
+  - url: 'https://localhost.std23105.com'
+paths:
+  /meals:
+    get:
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+            description: meal's name
+        - in: query
+          name: price
+          required: true
+          schema:
+            type: number
+            format: float
+            description: meal's price
+
+      responses:
+        '200':
+          description: List of meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateMeal'
+
+      responses:
+        '200':
+          description: List of created meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Meal'
+
+      responses:
+        '200':
+          description: List of modified meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+
+    delete:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/MealIdentifier'
+
+      responses:
+        '200':
+          description: List of deleted meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+
+components:
+  schemas:
+    Meal:
+      allOf:
+        - $ref: '#/components/schemas/MealIdentifier'
+        - $ref: "#/components/schemas/CreateMeal"
+    CreateMeal:
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+
+    MealIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+
+
+
+
+
+
+
