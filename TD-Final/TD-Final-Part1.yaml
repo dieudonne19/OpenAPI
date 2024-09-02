@@ -1,0 +1,240 @@
+openapi: 3.0.3
+info:
+  title: STD23105-TD-Final-Part1
+  version: 1.0.0
+servers:
+  - url: 'https://localhost.std23105.com'
+paths:
+  /competitions:
+    get:
+      parameters:
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: pageSize
+          required: true
+          schema:
+            type: number
+
+      responses:
+        '200':
+          description: List of competitions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competition'
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateCompetition'
+
+      responses:
+        '200':
+          description: List of created competitions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competition'
+
+  /teams:
+    get:
+      parameters:
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: pageSize
+          required: true
+          schema:
+            type: number
+        - in : query
+          name: teamName
+          required: true
+          description: Filter all teams found by teamName
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: List of teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateTeam'
+
+      responses:
+        '200':
+          description: List of created teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+
+  /teams/players:
+    get:
+      parameters:
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: pageSize
+          required: true
+          schema:
+            type: number
+        - in : query
+          name: playerName
+          required: true
+          description: playerName is used to filter all players found.
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of players
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreatePlayer'
+
+      responses:
+        '200':
+          description: List of created players
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Player'
+
+      responses:
+        '200':
+          description: List of updated players
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+
+components:
+  schemas:
+    CompetitionIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+    CreateCompetition:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Competition name
+        country:
+          type: string
+          description: Country where take place the competition
+    Competition:
+      allOf:
+        - $ref: '#/components/schemas/CompetitionIdentifier'
+        - $ref: '#/components/schemas/CreateCompetition'
+
+    TeamIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+    CreateTeam:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Team name
+        slogan:
+          type: string
+          description: The slogan of the team
+
+    Team:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/TeamIdentifier'
+        - $ref: '#/components/schemas/CreateTeam'
+      properties:
+        competitionList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Competition'
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/Player'
+
+
+    PlayerIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+    CreatePlayer:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Player name
+        number:
+          type: number
+          description: The number of the player
+        preferred-foot:
+          type: string
+    Player:
+      allOf:
+        - $ref: '#/components/schemas/PlayerIdentifier'
+        - $ref: '#/components/schemas/CreatePlayer'
